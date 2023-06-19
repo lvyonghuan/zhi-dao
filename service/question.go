@@ -106,3 +106,47 @@ func ChangeAnswer(token, text string, answerID int) (err error) {
 	}
 	return nil
 }
+
+func DeleteQuestion(token string, questionID int) (err error) {
+	err, id := checkExp(token, tokenSecret)
+	if err != nil {
+		return err
+	}
+	question, err := dao.SearchQuestionByQuestionID(questionID)
+	if err != nil {
+		return err
+	}
+	if question.QuestionerId != id {
+		return errors.New("用户无权限删除此提问")
+	}
+	temp, err := dao.ListAnswerByQuestionID(questionID)
+	if err != nil {
+		return err
+	} else if err == nil && len(temp) != 0 {
+		return errors.New("用户无权限删除此提问") //从产品角度讲，我认为这是对的，，，
+	}
+	err = dao.DeleteQuestion(question)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteAnswer(token string, answerID int) (err error) {
+	err, id := checkExp(token, tokenSecret)
+	if err != nil {
+		return err
+	}
+	answer, err := dao.SearchAnswerByAnswerID(answerID)
+	if err != nil {
+		return err
+	}
+	if answer.AnswererId != id {
+		return errors.New("用户无权限删除此回答")
+	}
+	err = dao.DeleteAnswer(answer)
+	if err != nil {
+		return err
+	}
+	return nil
+}

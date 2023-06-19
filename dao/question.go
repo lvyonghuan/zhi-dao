@@ -71,3 +71,29 @@ func ChangeAnswer(answer model.Answer) (err error) {
 	}
 	return nil
 }
+
+func ListAnswerByQuestionID(questionID int) (answerList model.AnswerList, err error) {
+	err = DB.Where("question_id=?", questionID).Find(&answerList).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	} else if err != nil {
+		return nil, errors.New("查找问题下回答错误：" + err.Error())
+	}
+	return answerList, nil
+}
+
+func DeleteQuestion(question model.Question) (err error) {
+	err = DB.Delete(question).Error
+	if err != nil {
+		return errors.New("删除问题错误：" + err.Error())
+	}
+	return nil
+}
+
+func DeleteAnswer(answer model.Answer) (err error) {
+	err = DB.Delete(answer).Error
+	if err != nil {
+		return errors.New("删除回答错误：" + err.Error())
+	}
+	return nil
+}
