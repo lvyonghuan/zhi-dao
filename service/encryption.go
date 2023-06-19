@@ -15,7 +15,9 @@ func encryption(str string) (encodingStr []byte, err error) {
 
 func verifyPassword(password string, encodingPassword []byte) error {
 	err := bcrypt.CompareHashAndPassword(encodingPassword, []byte(password))
-	if err != nil {
+	if err != nil && err.Error() == "crypto/bcrypt: hashedPassword is not the hash of the given password" {
+		return errors.New("密码错误")
+	} else if err != nil {
 		return errors.New("密码验证失败：" + err.Error())
 	}
 	return nil

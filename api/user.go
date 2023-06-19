@@ -18,3 +18,15 @@ func register(c *gin.Context) {
 	}
 	resp.ResponseOK(c)
 }
+
+func login(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	token, refreshToken, err := service.Login(username, password)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseLoginOK(c, token, refreshToken)
+}

@@ -19,14 +19,9 @@ func FindUserByUsername(username string) (err error, user model.User) {
 func Register(user model.User) (err error) {
 	err = DB.Create(&user).Error
 	if err != nil {
-		errors.New("数据库注册失败：" + err.Error())
+		return errors.New("数据库注册失败：" + err.Error())
 	}
 	return nil
-}
-
-func Login(username string) (user model.User, err error) {
-	err = DB.Where("name=?", username).First(&user).Error
-	return user, err
 }
 
 func FindUserByUid(uid int) (user model.User, err error) {

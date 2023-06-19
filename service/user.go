@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strconv"
 	"zhi-dao/dao"
 	"zhi-dao/model"
 )
@@ -27,6 +28,20 @@ func Register(username, password string) (err error) {
 	return nil
 }
 
-//func Login(username, password string) (token, refreshToken string, err error) {
-//
-//}
+func Login(username, password string) (token, refreshToken string, err error) {
+	err, user := dao.FindUserByUsername(username)
+	if err != nil {
+		return "", "", err
+	} else if user == (model.User{}) {
+		return "", "", errors.New("用户未注册")
+	}
+	err = verifyPassword(password, []byte(user.Password))
+	if err != nil {
+		return "", "", err
+	}
+	token, refreshToken, err = createTokenAndRefreshToken(strconv.Itoa(user.Id))
+	if err != nil {
+		return "", "", err
+	}
+	return token, refreshToken, nil
+}
