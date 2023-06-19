@@ -51,3 +51,44 @@ func getUserQuestionListAndAnswerList(c *gin.Context) {
 	}
 	resp.ResponseQuestionAndAnswerList(c, questionList, answerList)
 }
+
+// 知乎是他人也可以编辑问题。不过暂时没啥精力去做编辑日志。
+func changeQuestion(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	questionIDStr := c.Param("question_id")
+	title := c.PostForm("text")
+	introduce := c.PostForm("introduce")
+	topic := c.PostForm("topic")
+	questionID, err := strconv.Atoi(questionIDStr)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, "question id非法")
+		return
+	}
+	err = service.ChangeQuestion(token, title, introduce, topic, questionID)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseOK(c)
+}
+
+func changeAnswer(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	answerIDStr := c.Param("answer_id")
+	text := c.PostForm("text")
+	answerID, err := strconv.Atoi(answerIDStr)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, "answer id非法")
+		return
+	}
+	err = service.ChangeAnswer(token, text, answerID)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseOK(c)
+}

@@ -27,9 +27,17 @@ func SearchQuestionByQuestionID(id int) (question model.Question, err error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return model.Question{}, nil
 	} else if err != nil {
-		return model.Question{}, errors.New("查找用户错误：" + err.Error())
+		return model.Question{}, errors.New("查找问题错误：" + err.Error())
 	}
 	return question, nil
+}
+
+func SearchAnswerByAnswerID(id int) (answer model.Answer, err error) {
+	err = DB.Where("id=?", id).First(&answer).Error
+	if err != nil {
+		return model.Answer{}, errors.New("查找回答错误：" + err.Error())
+	}
+	return answer, nil
 }
 
 func SearchQuestionListByUserID(id int) (questionList model.QuestionList, err error) {
@@ -46,4 +54,20 @@ func SearchAnswerListByUserID(id int) (answerList model.AnswerList, err error) {
 		return nil, errors.New("查找用户回答错误：" + err.Error())
 	}
 	return answerList, nil
+}
+
+func ChangeQuestion(question model.Question) (err error) {
+	err = DB.Save(question).Error
+	if err != nil {
+		return errors.New("更新问题失败：" + err.Error())
+	}
+	return nil
+}
+
+func ChangeAnswer(answer model.Answer) (err error) {
+	err = DB.Save(answer).Error
+	if err != nil {
+		return errors.New("更新回答失败：" + err.Error())
+	}
+	return nil
 }
