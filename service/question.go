@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"zhi-dao/dao"
 	"zhi-dao/model"
 )
@@ -21,4 +22,30 @@ func CreateQuestion(token, title, introduce, topic string) (questionID int, err 
 		return 0, err
 	}
 	return questionID, nil
+}
+
+func CreateAnswer(token, text string, questionID int) (answerID int, err error) {
+	err, id := checkExp(token, tokenSecret)
+	if err != nil {
+		return 0, err
+	}
+
+	temp, err := dao.SearchQuestionByQuestionID(questionID)
+	if err != nil {
+		return 0, err
+	} else if temp == (model.Question{}) {
+		return 0, errors.New("没有该问题")
+	}
+
+	answer := model.Answer{
+		QuestionId: questionID,
+		AnswererId: id,
+		Text:       text,
+		Like:       0,
+	}
+	answerID, err = dao.CreateAnswer(answer)
+	if err != nil {
+		return 0, err
+	}
+	return answerID, err
 }

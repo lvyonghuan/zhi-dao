@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"zhi-dao/service"
@@ -10,6 +11,9 @@ import (
 func register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	if username == "" || password == "" {
+		resp.NormErr(c, 514, errors.New("用户名、密码不能为空").Error())
+	}
 	err := service.Register(username, password)
 	if err != nil {
 		log.Println(err)
@@ -22,6 +26,9 @@ func register(c *gin.Context) {
 func login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	if username == "" || password == "" {
+		resp.NormErr(c, 514, errors.New("用户名、密码不能为空").Error())
+	}
 	token, refreshToken, err := service.Login(username, password)
 	if err != nil {
 		log.Println(err)

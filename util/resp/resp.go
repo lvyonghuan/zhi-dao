@@ -33,3 +33,10 @@ func ResponseQuestionID(c *gin.Context, id int) {
 		"question_id": id,
 	})
 }
+
+func ResponseAnswerID(c *gin.Context, id int) {
+	c.JSON(http.StatusOK, gin.H{
+		"status":    200,
+		"answer_id": id,
+	})
+}
