@@ -12,7 +12,7 @@ func InitRouters() {
 	}
 	question := r.Group("/question")
 	{
-		question.POST("/create")
+		question.POST("/create", createQuestion)
 		question.POST("/answer")
 		question.GET("/look/:question_id")
 		question.PUT("/change_question/:question_id")

@@ -26,3 +26,10 @@ func ResponseTokenOK(c *gin.Context, token, refreshToken string) {
 		"refresh_token": refreshToken,
 	})
 }
+
+func ResponseQuestionID(c *gin.Context, id int) {
+	c.JSON(http.StatusOK, gin.H{
+		"status":      200,
+		"question_id": id,
+	})
+}
