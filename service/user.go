@@ -45,3 +45,15 @@ func Login(username, password string) (token, refreshToken string, err error) {
 	}
 	return token, refreshToken, nil
 }
+
+func RefreshToken(refreshToken string) (token, newRefreshToken string, err error) {
+	err, id := checkExp(refreshToken, refreshTokenSecret)
+	if err != nil {
+		return "", "", err
+	}
+	token, newRefreshToken, err = createTokenAndRefreshToken(strconv.Itoa(id))
+	if err != nil {
+		return "", "", err
+	}
+	return token, newRefreshToken, err
+}

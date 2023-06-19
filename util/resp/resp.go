@@ -19,7 +19,7 @@ func ResponseOK(c *gin.Context) {
 	})
 }
 
-func ResponseLoginOK(c *gin.Context, token, refreshToken string) {
+func ResponseTokenOK(c *gin.Context, token, refreshToken string) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":        200,
 		"token":         token,

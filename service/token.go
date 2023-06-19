@@ -56,7 +56,7 @@ func createTokenAndRefreshToken(id string) (token, refreshToken string, err erro
 }
 
 // CheckExp 检测token是否过期
-func CheckExp(token, secret string) (err error, id int) {
+func checkExp(token, secret string) (err error, id int) {
 	mapClaims, err := parseJWT(token, secret)
 	if err != nil {
 		log.Println("jwt解密错误")

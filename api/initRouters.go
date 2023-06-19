@@ -8,7 +8,7 @@ func InitRouters() {
 	{
 		user.POST("/register", register)
 		user.GET("/login", login)
-		user.GET("/refresh_token")
+		user.GET("/refresh_token", refreshToken)
 	}
 	question := r.Group("/question")
 	{

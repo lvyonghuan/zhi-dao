@@ -28,5 +28,16 @@ func login(c *gin.Context) {
 		resp.NormErr(c, 400, err.Error())
 		return
 	}
-	resp.ResponseLoginOK(c, token, refreshToken)
+	resp.ResponseTokenOK(c, token, refreshToken)
+}
+
+func refreshToken(c *gin.Context) {
+	refreshToken := c.GetHeader("Authorization")
+	token, newRefreshToken, err := service.RefreshToken(refreshToken)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseTokenOK(c, token, newRefreshToken)
 }
