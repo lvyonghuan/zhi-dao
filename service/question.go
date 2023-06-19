@@ -49,3 +49,19 @@ func CreateAnswer(token, text string, questionID int) (answerID int, err error) 
 	}
 	return answerID, err
 }
+
+func SearchUserQuestionAndAnswer(token string) (questionList model.QuestionList, answerList model.AnswerList, err error) {
+	err, id := checkExp(token, tokenSecret)
+	if err != nil {
+		return nil, nil, err
+	}
+	questionList, err = dao.SearchQuestionListByUserID(id)
+	if err != nil {
+		return nil, nil, err
+	}
+	answerList, err = dao.SearchAnswerListByUserID(id)
+	if err != nil {
+		return nil, nil, err
+	}
+	return questionList, answerList, nil
+}

@@ -15,6 +15,7 @@ func InitRouters() {
 		question.POST("/create", createQuestion)
 		question.POST("/answer", createAnswer)
 		question.GET("/look/:question_id")
+		question.GET("/my", getUserQuestionListAndAnswerList) //获取自己的所有问题、回答
 		question.PUT("/change_question/:question_id")
 		question.DELETE("/:answer_id") //虽然但是，知乎好像没有去删除提问的功能？从产品角度考虑，删除问题意味着删除回答，这和删帖不一样——回答者某种意义上是付出了成本的。提问者未经商讨就删除问题是对回答者的不尊重。
 		question.PUT("/update_answer/:answer_id")

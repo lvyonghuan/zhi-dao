@@ -40,3 +40,14 @@ func createAnswer(c *gin.Context) {
 	}
 	resp.ResponseAnswerID(c, id)
 }
+
+func getUserQuestionListAndAnswerList(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	questionList, answerList, err := service.SearchUserQuestionAndAnswer(token)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseQuestionAndAnswerList(c, questionList, answerList)
+}

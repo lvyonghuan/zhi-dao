@@ -31,3 +31,19 @@ func SearchQuestionByQuestionID(id int) (question model.Question, err error) {
 	}
 	return question, nil
 }
+
+func SearchQuestionListByUserID(id int) (questionList model.QuestionList, err error) {
+	err = DB.Where("questioner_id=?", id).Find(&questionList).Error
+	if err != nil {
+		return nil, errors.New("查找用户问题错误：" + err.Error())
+	}
+	return questionList, nil
+}
+
+func SearchAnswerListByUserID(id int) (answerList model.AnswerList, err error) {
+	err = DB.Where("answerer_id=?", id).Find(&answerList).Error
+	if err != nil {
+		return nil, errors.New("查找用户回答错误：" + err.Error())
+	}
+	return answerList, nil
+}

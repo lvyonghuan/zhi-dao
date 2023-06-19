@@ -1,5 +1,8 @@
 package model
 
+type QuestionList []Question
+type AnswerList []Answer
+
 type Question struct {
 	Id           int    `json:"id"`
 	QuestionerId int    `json:"questioner_id"`
