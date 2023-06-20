@@ -151,8 +151,8 @@ CSA golang后端2023年初期考核
 | 参数              | 类型             | 描述   |
 |:----------------|:---------------|:-----|
 | `status`        | `int`          | 状态码  |
-| `question_list` | `array struct` | 回答id |
-| `answer_list`   | `array struct` | 回答id |
+| `question_list` | `array struct` | 问题列表 |
+| `answer_list`   | `array struct` | 回答列表 |
 
 成功返回示例
 ```json
@@ -277,5 +277,44 @@ CSA golang后端2023年初期考核
 {
   "info": "success",
   "status": 200
+}
+```
+---
+#### 查看问题及问题下所有回答
+```
+  DELETE /question/delete_answer/{answer_id}
+```
+| 参数            | 位置     | 类型       | 描述           |
+|:--------------|:-------|:---------|:-------------|
+| `question_id` | path   | `int`    | **必选**, 问题id |
+
+返回参数：
+
+| 参数            | 类型             | 描述   |
+|:--------------|:---------------|:-----|
+| `status`      | `int`          | 状态码  |
+| `question`    | `struct`        | 问题   |
+| `answer_list` | `array struct` | 回答列表 |
+
+成功返回示例
+```json
+{
+    "answer_list": [
+        {
+            "id": 2,
+            "question_id": 2,
+            "answerer_id": 2,
+            "text": "ypm1",
+            "like": 0
+        }
+    ],
+    "question": {
+        "id": 2,
+        "questioner_id": 2,
+        "title": "hello world",
+        "introduce": "hello1",
+        "topic": "hello"
+    },
+    "status": 200
 }
 ```

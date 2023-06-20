@@ -20,10 +20,18 @@ func ResponseAnswerID(c *gin.Context, id int) {
 	})
 }
 
-func ResponseQuestionAndAnswerList(c *gin.Context, questionList model.QuestionList, answerList model.AnswerList) {
+func ResponseQuestionListAndAnswerList(c *gin.Context, questionList model.QuestionList, answerList model.AnswerList) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":        200,
 		"question_list": questionList,
 		"answer_list":   answerList,
+	})
+}
+
+func ResponseQuestionAndAnswerList(c *gin.Context, question model.Question, answerList model.AnswerList) {
+	c.JSON(http.StatusOK, gin.H{
+		"status":      200,
+		"question":    question,
+		"answer_list": answerList,
 	})
 }

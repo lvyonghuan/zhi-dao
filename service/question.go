@@ -150,3 +150,17 @@ func DeleteAnswer(token string, answerID int) (err error) {
 	}
 	return nil
 }
+
+func GetQuestionAndAnswer(questionID int) (question model.Question, answerList model.AnswerList, err error) {
+	question, err = dao.SearchQuestionByQuestionID(questionID)
+	if err != nil {
+		return model.Question{}, nil, err
+	} else if err == nil && question == (model.Question{}) {
+		return model.Question{}, nil, errors.New("没有该问题")
+	}
+	answerList, err = dao.ListAnswerByQuestionID(questionID)
+	if err != nil {
+		return model.Question{}, nil, err
+	}
+	return question, answerList, err
+}

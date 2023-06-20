@@ -49,7 +49,7 @@ func getUserQuestionListAndAnswerList(c *gin.Context) {
 		resp.NormErr(c, 400, err.Error())
 		return
 	}
-	resp.ResponseQuestionAndAnswerList(c, questionList, answerList)
+	resp.ResponseQuestionListAndAnswerList(c, questionList, answerList)
 }
 
 // 知乎是他人也可以编辑问题。不过暂时没啥精力去做编辑日志。
@@ -127,4 +127,21 @@ func deleteAnswer(c *gin.Context) {
 		return
 	}
 	resp.ResponseOK(c)
+}
+
+func getQuestionAndAnswer(c *gin.Context) {
+	questionIDStr := c.Param("question_id")
+	questionID, err := strconv.Atoi(questionIDStr)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, "question id非法")
+		return
+	}
+	question, answerList, err := service.GetQuestionAndAnswer(questionID)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseQuestionAndAnswerList(c, question, answerList)
 }

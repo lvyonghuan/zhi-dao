@@ -8,7 +8,7 @@ import (
 func encryption(str string) (encodingStr []byte, err error) {
 	encodingStr, err = bcrypt.GenerateFromPassword([]byte(str), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, errors.New("密码机密失败：" + err.Error())
+		return nil, errors.New("密码加密失败：" + err.Error())
 	}
 	return encodingStr, nil
 }
