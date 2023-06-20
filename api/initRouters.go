@@ -24,9 +24,11 @@ func InitRouters() {
 	}
 	comment := r.Group("/comment")
 	{
-		comment.POST("/create")
+		comment.POST("/:answer_id", creatComment)
+		comment.POST("/reply")
 		comment.DELETE("/:comment_id")
-		comment.POST("/:comment_id")
+		comment.GET("/:answer_id")
+		comment.POST("/like")
 	}
 	r.Run()
 }
