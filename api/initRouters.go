@@ -20,14 +20,15 @@ func InitRouters() {
 		question.DELETE("/delete_answer/:answer_id", deleteAnswer)
 		question.DELETE("/delete_question/:question_id", deleteQuestion) //在问题没有回答的前提下
 		question.PUT("/change_answer/:answer_id", changeAnswer)
-		question.POST("/:answer_id")
+		question.POST("/like", likeAnswer)
 	}
 	comment := r.Group("/comment")
 	{
 		comment.POST("/:answer_id", creatComment)
-		comment.POST("/reply")
-		comment.DELETE("/:comment_id")
-		comment.GET("/:answer_id")
+		comment.POST("/reply", replyComment)
+		comment.DELETE("/:comment_id", deleteComment)
+		comment.GET("/:answer_id", getCommentList)
+		comment.GET("/reply/:comment_id", getReplyCommentList)
 		comment.POST("/like")
 	}
 	r.Run()

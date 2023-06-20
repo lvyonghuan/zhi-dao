@@ -164,3 +164,15 @@ func GetQuestionAndAnswer(questionID int) (question model.Question, answerList m
 	}
 	return question, answerList, err
 }
+
+func LikeAnswer(token string, answer int) (err error) {
+	err, uid := checkExp(token, tokenSecret)
+	if err != nil {
+		return err
+	}
+	err = dao.LikeAnswer(answer, uid)
+	if err != nil {
+		return err
+	}
+	return nil
+}

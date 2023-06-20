@@ -145,3 +145,21 @@ func getQuestionAndAnswer(c *gin.Context) {
 	}
 	resp.ResponseQuestionAndAnswerList(c, question, answerList)
 }
+
+func likeAnswer(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	answerIDStr := c.Query("answer_id")
+	answerID, err := strconv.Atoi(answerIDStr)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, "answer id非法")
+		return
+	}
+	err = service.LikeAnswer(token, answerID)
+	if err != nil {
+		log.Println(err)
+		resp.NormErr(c, 400, err.Error())
+		return
+	}
+	resp.ResponseOK(c)
+}

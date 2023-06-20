@@ -3,6 +3,7 @@ package dao
 import (
 	"errors"
 	"gorm.io/gorm"
+	"strconv"
 	"zhi-dao/model"
 )
 
@@ -94,6 +95,48 @@ func DeleteAnswer(answer model.Answer) (err error) {
 	err = DB.Delete(answer).Error
 	if err != nil {
 		return errors.New("删除回答错误：" + err.Error())
+	}
+	return nil
+}
+
+func LikeAnswer(answerID, uid int) (err error) {
+	isLike, err := Redis.SIsMember(strconv.Itoa(answerID), uid).Result()
+	if err != nil {
+		return errors.New("redis查询错误：" + err.Error())
+	}
+	if !isLike {
+		err = Redis.SAdd(strconv.Itoa(answerID), uid).Err()
+		if err != nil {
+			return errors.New("点赞失败")
+		}
+	} else {
+		err = Redis.SRem(strconv.Itoa(answerID), uid).Err()
+		if err != nil {
+			return errors.New("取消点赞失败")
+		}
+	}
+	err = updateLikes(answerID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// 没提前计划好。下次（如果有下次的话，，，）用消息队列试试。
+func updateLikes(answerID int) (err error) {
+	num, err := Redis.SCard(strconv.Itoa(answerID)).Result()
+	if err != nil {
+		return errors.New("获取点赞数失败")
+	}
+	var answer model.Answer
+	err = DB.Where("id=?", answerID).First(&answer).Error
+	if err != nil {
+		return errors.New("查询回答错误")
+	}
+	answer.Like = int(num)
+	err = DB.Save(answer).Error
+	if err != nil {
+		return errors.New("更新点赞错误")
 	}
 	return nil
 }

@@ -1,5 +1,7 @@
 package model
 
+type CommentList []Comment
+
 type Comment struct {
 	Id          int    `json:"id"`
 	QuestionId  int    `json:"question_id"`
